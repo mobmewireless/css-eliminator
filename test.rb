@@ -1,5 +1,5 @@
 
-require 'css_eliminator'
+require 'lib/css_eliminator'
 require 'open-uri'
 
 # 

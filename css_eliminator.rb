@@ -1,42 +1,25 @@
 
-require 'rubygems'
-require 'hpricot'
-
-class CSSEliminator
-  class << self
-    def find_all_css_matching(html_doc, css_doc)
-      html_doc = Hpricot.parse(html_doc)
-      selectors = self.find_selectors_from_css(css_doc)
-      rules_css = []
-      selectors.each do |selector|
-        selector_without_pseudo_classes = selector.gsub(/\:(.*)/, '')
-        unless (html_doc/selector_without_pseudo_classes).empty? 
-          rule_for_selector = self.find_rule_for_selector(selector, css_doc)
-          rules_css << rule_for_selector
-          p rule_for_selector
-        end
-      end
-      rules_css.uniq.join("\n")
-    end
-
-    def find_selectors_from_css(css_doc)
-      css_doc = self.normalize_css(css_doc)
-      rules = css_doc.split('}').map { |rule| rule << "}" }[0..-2]
-      selectors = []
-      rules.each do |rule|
-        selectors << (rule.match(/(.*)\{(.*)?\}/))[1]
-      end
-      selectors.uniq
-    end
-
-    def find_rule_for_selector(selector, css_doc)
-      css_doc = self.normalize_css(css_doc)
-      css_doc.match(/^#{selector}\{(.*)?\}/)[0]
-    end
-    
-    def normalize_css(css_doc)
-      css_doc.split('}').map { |rule| rule << "}" }[0..-2].join("\n")
-    end
-  end
+unless ARGV.length == 3
+  puts "Usage: ruby css_intelligent_compressor.rb 
+            <input_html_file> <input_css_file> <output_minimized_css_file>
+        Input can be any resource, e.g. http://"
+  exit 1
 end
-  
+
+require 'lib/css_eliminator'
+require 'open-uri'
+
+puts "Loading HTML..."
+html_doc = open(ARGV[0]).read
+puts "Loading CSS..."
+css_doc = open(ARGV[1]).read
+
+puts "Generating matching CSS..."
+rule_css = CSSEliminator.find_all_css_matching(html_doc, css_doc)
+
+puts "Writing file..."
+File.open(ARGV[2], "w") do |f|
+  f.write(rule_css)
+end
+
+puts "Done!"
