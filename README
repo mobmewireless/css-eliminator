@@ -4,9 +4,14 @@ CSS Eliminator
 Minimizes an HTML and CSS file combination to a smaller CSS file containing 
 only rules used by the provided HTML.
 
-For best results, copy "Generated HTML" instead of a simple "View Source"
+For best results, copy "Generated HTML" using Firefox's Web Developer 
+Toolbar instead of a simple "View Source".
+
+This works well with minimized CSS as input but it doesn't minimize or
+mangle the output CSS except to eliminate un-needed CSS rules.
 
 Usage: ruby css_eliminator.rb 
           <input_html_file> <input_css_file> <output_minimized_css_file>
         Input streams can be a resource, e.g. http://
         
+Run test.rb for an example.
