@@ -1,0 +1,12 @@
+
+CSS Intelligent Compressor
+
+Minimizes an HTML and CSS file combination to a smaller CSS file containing 
+only rules used by the provided HTML.
+
+For best results, copy "Generated HTML" instead of a simple "View Source"
+
+Usage: ruby css_intelligent_compressor.rb 
+          <input_html_file> <input_css_file> <output_minimized_css_file>
+        Input streams can be a resource, e.g. http://
+        
